@@ -10,14 +10,32 @@ public class Main {
         long start;
         long end;
         //int threads = 1;
-        //int[][][] matrixes = generateMatrix(200,200,500);
+        int[][][] matrixes1 = generateMatrix(20,20,1000);
+        int[][][] matrixes2 = generateMatrix(200,200,500);
         String dir = "D:/JavaProjects/mitpp1/resources/";
+
+        MultiThreadMultiply.mul(matrixes1,10);//cold start cpu
+        MultiThreadMultiply.mul(matrixes2,10);//cold start memory
         for(int threads = 1; threads<=10;threads++){
             start=System.currentTimeMillis();
-            //MultiThreadMultiply.mul(matrixes,threads);
+            MultiThreadMultiply.mul(matrixes1,threads);
+            end = System.currentTimeMillis();
+            System.out.println("CPU estimated time for "+threads+" threads is "+(end-start)+" ms");
+        }
+        for(int threads = 1; threads<=10;threads++){
+            start=System.currentTimeMillis();
+            MultiThreadMultiply.mul(matrixes2,threads);
+            end = System.currentTimeMillis();
+            System.out.println("Memory estimated time for "+threads+" threads is "+(end-start)+" ms");
+        }
+        for(int threads = 1; threads<=10;threads++){                                 //cold start io
+            MultiThreadIO.execute(threads,dir+String.valueOf(threads)+"/");
+        }
+        for(int threads = 1; threads<=10;threads++){
+            start=System.currentTimeMillis();
             MultiThreadIO.execute(threads,dir+String.valueOf(threads)+"/");
             end = System.currentTimeMillis();
-            System.out.println("Estimated time for "+threads+" threads is "+(end-start)+" ms");
+            System.out.println("IO estimated time for "+threads+" threads is "+(end-start)+" ms");
         }
 
     }
